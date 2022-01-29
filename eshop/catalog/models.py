@@ -77,7 +77,7 @@ class Manufacturer(models.Model):
                                    related_name='manufacturer_updater')
 
     def __str__(self):
-        return f"Category: {self.name}"
+        return f"Manufacturer: {self.name}"
 
     class Meta:
         db_table = "manufacturer"

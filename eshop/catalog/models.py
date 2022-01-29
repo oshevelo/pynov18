@@ -8,6 +8,7 @@ class Categories(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True, null=True)
     slug = models.SlugField(unique=True, editable=False)
+    image = models.ImageField(blank=True)
     parent_cat = models.ForeignKey("Categories", on_delete=models.PROTECT, blank=True, null=True, )
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -33,7 +34,7 @@ class Products(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True, null=True)
     slug = models.SlugField(unique=True, editable=False)
-    image = models.ImageField()
+    image = models.ImageField(blank=True)
     category = models.ForeignKey("Categories", on_delete=models.PROTECT, blank=True, null=True,
                                  related_name='product_category')
     manufacturer = models.ForeignKey("Manufacturer", on_delete=models.PROTECT, blank=True, null=True,
@@ -67,12 +68,16 @@ class Manufacturer(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255, blank=True, null=True)
     slug = models.SlugField(unique=True, editable=False)
+    image = models.ImageField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True,
                                    related_name='manufacturer_creator')
     updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True,
                                    related_name='manufacturer_updater')
+
+    def __str__(self):
+        return f"Category: {self.name}"
 
     class Meta:
         db_table = "manufacturer"

@@ -3,8 +3,10 @@ from django.db import models
 
 from django.utils.text import slugify
 
+from apps_generic.whodidit.models import WhoDidIt
 
-class Category(models.Model):
+
+class Category(WhoDidIt):
     name = models.CharField(verbose_name="category", max_length=255)
     description = models.TextField(verbose_name="description", max_length=2000, blank=True, null=True)
     slug = models.SlugField(verbose_name="slug", unique=True, editable=False)
@@ -13,12 +15,7 @@ class Category(models.Model):
                                    blank=True,
                                    null=True, )
     is_active = models.BooleanField(verbose_name="is_active", default=True)
-    created_at = models.DateTimeField(verbose_name="created_at", auto_now_add=True)
-    updated_at = models.DateTimeField(verbose_name="updated_at", auto_now=True)
-    created_by = models.ForeignKey(User, verbose_name="created_by", on_delete=models.PROTECT, null=True, blank=True,
-                                   related_name='category_creator')
-    updated_by = models.ForeignKey(User, verbose_name="updated_by", on_delete=models.PROTECT, null=True, blank=True,
-                                   related_name='category_updater')
+    is_deleted = models.BooleanField(verbose_name='is deleted', default=False)
 
     def save(self, *args, **kwargs):
         value = self.name
@@ -33,7 +30,7 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
 
 
-class Product(models.Model):
+class Product(WhoDidIt):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=20000, blank=True, null=True)
     slug = models.SlugField(unique=True, editable=False)
@@ -44,16 +41,11 @@ class Product(models.Model):
                                      related_name='products')
     sku = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    price = models.DecimalField(max_digits=5, default=0, decimal_places=2, blank=True, null=True)
+    price = models.DecimalField(max_digits=9, default=0, decimal_places=2, blank=True, null=True)
     discount = models.PositiveIntegerField(default=0, blank=True, null=True)
     quantity = models.PositiveIntegerField(default=0)
     attributes = models.JSONField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True,
-                                   related_name='product_creator')
-    updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True,
-                                   related_name='products_updater')
+    is_deleted = models.BooleanField(verbose_name='is deleted', default=False)
 
     @property
     def actual_price(self):
@@ -72,18 +64,13 @@ class Product(models.Model):
         verbose_name_plural = "Products"
 
 
-class Manufacturer(models.Model):
+class Manufacturer(WhoDidIt):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=2000, blank=True, null=True)
     slug = models.SlugField(unique=True, editable=False)
     image = models.ImageField(upload_to="manufacturers/%Y/%m/%d", blank=True)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True,
-                                   related_name='creator')
-    updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True,
-                                   related_name='updater')
+    is_deleted = models.BooleanField(verbose_name='is deleted', default=False)
 
     def save(self, *args, **kwargs):
         value = self.name

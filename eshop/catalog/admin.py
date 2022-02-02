@@ -16,7 +16,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
     def get_image(self, obj):
         if obj.image:
-            return mark_safe(f"<img src='{obj.image.url}' width='50'")
+            return mark_safe(f"<img src='{obj.image.url}' width='50'>")
 
     get_image.short_description = "Img"
 

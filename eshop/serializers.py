@@ -22,8 +22,11 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'parent_cat', 'slug', 'image', 'is_active']
 
     def create(self, validated_data):
-        validated_data.pop('parent_cat')
-        return Category.objects.create(**validated_data)
+        parent_cat_data = validated_data.pop('parent_cat')
+        cat = Category.objects.create(**validated_data)
+        cat.parent_cat = Category.objects.filter(pk=parent_cat_data.get('id')).first()
+        cat.save()
+        return cat
 
 
 class CategoryDetailSerializer(serializers.ModelSerializer):
@@ -102,19 +105,38 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['id', 'name', 'slug', 'category', 'manufacturer', 'sku', 'images', 'price', 'actual_price', ]
 
+    def create(self, validated_data):
+        category = validated_data.pop('category')
+        manufacturer = validated_data.pop('manufacturer')
+        images = validated_data.pop('images')
+        product = Product.objects.create(**validated_data)
+        product.category = Category.objects.filter(pk=category.get('id')).first()
+        product.manufacturer = Manufacturer.objects.filter(pk=manufacturer.get('id')).first()
+        product.images.set(images)
+        product.save()
+        return product
+
 
 class ProductDetailSerializer(serializers.ModelSerializer):
-    category = CategoryNestedSerializer()
-    manufacturer = ManufacturerNestedSerializer()
+    category = CategoryNestedSerializer(required=False, allow_null=True, )
+    manufacturer = ManufacturerNestedSerializer(required=False, allow_null=True, )
     images = ImageNestedSerializer(required=False, allow_null=True, many=True)
 
     class Meta:
         model = Product
         fields = ['id', 'sku', 'name', 'description', 'slug', 'category', 'manufacturer', 'images', 'attributes',
                   'price', 'actual_price', 'discount', 'quantity', 'is_active', 'is_available', ]
-    # TODO add update()
-    # def update(self, obj, data):
-    #     pass
-    # TODO add create()
-    # def create(self, validated_data):
-    #     pass
+
+    def update(self, obj, data):
+        print(data)
+        category = data.pop('category')
+        manufacturer = data.pop('manufacturer')
+        images = data.pop('images')
+        obj = super().update(obj, data)
+
+        obj.category = Category.objects.filter(pk=category.get('id')).first()
+        obj.manufacturer = Manufacturer.objects.filter(pk=manufacturer.get('id')).first()
+        obj.images.set(images)
+
+        obj.save()
+        return obj

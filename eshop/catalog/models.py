@@ -18,7 +18,7 @@ def make_thumbnail(image, name_prefix="", quality=85, basewidth=600):
     hsize = int((float(im.size[1]) * float(wpercent)))
     im = im.resize((basewidth, hsize), Image.ANTIALIAS)
     thumb_io = BytesIO()  # create a BytesIO object
-    im.save(thumb_io, 'JPEG', quality=quality)  # save image to BytesIO object
+    im.save(thumb_io, 'PNG', quality=quality)  # save image to BytesIO object
     thumbnail = File(thumb_io, name=name_prefix + image.name)  # create a django friendly File object
 
     return thumbnail
@@ -31,8 +31,7 @@ class Category(WhoDidIt):
                                    null=True, )
     description = models.TextField(verbose_name="description", max_length=2000, blank=True, null=True)
     slug = models.SlugField(verbose_name="slug", unique=True, editable=False)
-    image = models.ImageField(verbose_name="image", default="default/product/default_product_image.png",
-                              upload_to="categories/%Y/%m/%d", blank=True)
+    image = models.ImageField(verbose_name="image", upload_to="categories/%Y/%m/%d", blank=True)
 
     is_active = models.BooleanField(verbose_name="is_active", default=True)
 
@@ -70,17 +69,17 @@ class Manufacturer(WhoDidIt):
 
 
 class ProductImage(WhoDidIt):
-    original = models.ImageField(upload_to="products/original/", default="default/product/default_product_image.png",
-                                 blank=True, null=True)
-    big_image = models.ImageField(upload_to="products/big/", default="default/product/default_product_image.png",
-                                  editable=False, blank=True, null=True, )
-    small_image = models.ImageField(upload_to="products/small/", default="default/product/default_product_image.png",
-                                    editable=False, blank=True, null=True)
+    original = models.ImageField(upload_to="products/original/%Y/%m/%d", blank=True, null=True)
+    big_image = models.ImageField(upload_to="products/big/%Y/%m/%d", editable=False, blank=True, null=True, )
+    small_image = models.ImageField(upload_to="products/small/%Y/%m/%d", editable=False, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         self.big_image = make_thumbnail(self.original, quality=90, basewidth=400, name_prefix="", )
-        self.small_image = make_thumbnail(self.original, quality=90, basewidth=150, name_prefix="")
+        self.small_image = make_thumbnail(self.original, quality=90, basewidth=150, name_prefix="", )
         super().save(*args, **kwargs)
+
+    def get_file_path(self):
+        pass
 
     def str(self):
         return f"{self.original.name}"

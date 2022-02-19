@@ -11,6 +11,6 @@ urlpatterns = [
     path('manufacturer/<int:pk>/', views.ManufacturerDetail.as_view()),
     path('image/', views.ProductImageList.as_view()),
     path('image/<int:pk>/', views.ProductImageDetail.as_view()),
-    path('', views.ProductList.as_view()),
-    path('<int:pk>/', views.ProductDetail.as_view()),
+    path('product/', views.ProductList.as_view()),
+    path('product/<int:pk>/', views.ProductDetail.as_view()),
 ]

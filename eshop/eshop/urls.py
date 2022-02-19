@@ -6,7 +6,8 @@ from eshop import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('catalog/', include('catalog.urls'))
+    path('catalog/', include('catalog.urls')),
+    path('demo/', include('demo.urls')),
 ]
 
 if settings.DEBUG:

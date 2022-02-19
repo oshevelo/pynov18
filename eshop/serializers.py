@@ -19,7 +19,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'parent_cat', 'slug', 'image', 'is_active']
+        fields = ['id', 'name', 'description', 'parent_cat', 'slug', 'image', 'is_active']
 
     def create(self, validated_data):
         parent_cat_data = validated_data.pop('parent_cat')
@@ -57,7 +57,7 @@ class ManufacturerNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Manufacturer
-        fields = ['id', 'name', ]
+        fields = ['id', 'name', 'image']
 
 
 class ManufacturerSerializer(serializers.ModelSerializer):
@@ -103,7 +103,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'slug', 'category', 'manufacturer', 'sku', 'images', 'price', 'actual_price', ]
+        fields = ['id', 'sku', 'name', 'description', 'slug', 'category', 'manufacturer', 'images', 'attributes',
+                  'price', 'actual_price', 'discount', 'quantity', 'is_active', 'is_available', ]
 
     def create(self, validated_data):
         category = validated_data.pop('category')

@@ -18,6 +18,7 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategoryDetailSerializer
 
 
+
 class ManufacturerList(generics.ListCreateAPIView):
     queryset = Manufacturer.objects.filter(is_active=True)
     serializer_class = ManufacturerSerializer

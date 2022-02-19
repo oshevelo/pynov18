@@ -1,6 +1,7 @@
 import decimal
 from io import BytesIO
 
+from django.core.validators import MinValueValidator
 from unidecode import unidecode
 
 from PIL import Image
@@ -100,7 +101,8 @@ class Product(WhoDidIt):
     sku = models.CharField(max_length=12)
     images = models.ManyToManyField(ProductImage, through='ProductImageRelated', related_name='products')
     attributes = models.JSONField(blank=True, null=True)
-    price = models.DecimalField(max_digits=9, default=0, decimal_places=2, blank=True, null=True)
+    price = models.DecimalField(max_digits=9, default=0, decimal_places=2, blank=True, null=True,
+                                validators=[MinValueValidator(0, 'Min value is 0')])
     discount = models.PositiveIntegerField(default=0, blank=True, null=True, help_text="in percent")
     quantity = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)

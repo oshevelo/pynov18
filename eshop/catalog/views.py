@@ -2,7 +2,7 @@ from rest_framework import generics
 
 from catalog.paginations import CatalogPagination
 from .models import Category, Manufacturer, ProductImage, Product
-from serializers import CategorySerializer, CategoryDetailSerializer, ManufacturerSerializer, \
+from catalog.serializers import CategorySerializer, CategoryDetailSerializer, ManufacturerSerializer, \
     ManufacturerDetailSerializer, ProductImageSerializer, ProductSerializer, ProductDetailSerializer, \
     ProductImageDetailSerializer
 

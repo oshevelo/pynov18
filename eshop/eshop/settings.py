@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'imagekit',
     'catalog',
-    'demo'
+    'demo',
 ]
 
 MIDDLEWARE = [
@@ -114,5 +114,9 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+}
 
 from eshop.local_settings import *

@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/eshop/media/categories/
+/eshop/media/manufacturers/
+/eshop/media/products/

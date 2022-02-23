@@ -19,7 +19,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description', 'parent_cat', 'slug', 'image', 'is_active']
+        fields = ['id', 'name', 'description', 'parent_cat', 'slug', 'image', 'is_active', ]
 
     def create(self, validated_data):
         parent_cat_data = validated_data.pop('parent_cat')
@@ -36,7 +36,7 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ['id', 'name', 'description', 'parent_cat', 'slug', 'image', 'is_active']
+        fields = ['id', 'name', 'description', 'parent_cat', 'slug', 'image', 'is_active', ]
 
     def update(self, obj, data):
         parent_cat_data = data.pop('parent_cat')
